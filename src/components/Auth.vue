@@ -69,66 +69,78 @@
             </button>
           </form>
           <!-- Registration Form -->
-          <vee-form v-show="tab === 'register'" :validation-schema="schema">
+          <vee-form v-show="tab === 'register'" :validation-schema="schema"
+          @submit="register" :initial-values="userData">
             <!-- Name -->
             <div class="mb-3">
               <label class="inline-block mb-2">Name</label>
               <vee-field type="text" name="name"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
                   duration-500 focus:outline-none focus:border-black rounded"
-                placeholder="Enter Name"  :rule="{
-                  required: true
-                }"/>
-                <span class="text-red-600" name="name">{ErrorMessage}</span>
+                placeholder="Enter Name"  />
               <ErrorMessage class="text-red-600"  name="name" />
             </div>
             <!-- Email -->
             <div class="mb-3">
               <label class="inline-block mb-2">Email</label>
-              <input type="email"
+              <vee-field type="email" name="email"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
                   duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Enter Email" />
+                <ErrorMessage  class="text-red-600" name="email"/>
             </div>
             <!-- Age -->
             <div class="mb-3">
               <label class="inline-block mb-2">Age</label>
-              <input type="number"
+              <vee-field type="number" name="age"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
                   duration-500 focus:outline-none focus:border-black rounded" />
+                  <ErrorMessage class="text-red-600" name="age" />
             </div>
             <!-- Password -->
             <div class="mb-3">
               <label class="inline-block mb-2">Password</label>
-              <input type="password"
-                class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
+              <vee-field type="password" name="password"
+                :bails="false" v-slot="{ field, errors }">
+                <input class="block w-full py-1.5 px-3 text-gray-800 border
+                  border-gray-300 transition
                   duration-500 focus:outline-none focus:border-black rounded"
-                placeholder="Password" />
+                placeholder="Password" v-bind="field" />
+              <div class="text-red-600" v-for="error in errors" :key="error">
+                {{ error }}
+              </div>
+              </vee-field>
+                 <ErrorMessage class="text-red-600" name="password" />
             </div>
             <!-- Confirm Password -->
             <div class="mb-3">
               <label class="inline-block mb-2">Confirm Password</label>
-              <input type="password"
+              <vee-field type="password" name="confirm_password"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
                   duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Confirm Password" />
+                <ErrorMessage class="text-red-600" name="confirm_password" />
             </div>
             <!-- Country -->
             <div class="mb-3">
               <label class="inline-block mb-2">Country</label>
-              <select
+              <vee-field as="select" name="country"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
                   duration-500 focus:outline-none focus:border-black rounded">
                 <option value="USA">USA</option>
                 <option value="Mexico">Mexico</option>
                 <option value="Germany">Germany</option>
-              </select>
+                <option value="Antarctica">Antarctica</option>
+              </vee-field>
+               <ErrorMessage class="text-red-600" name="country" />
             </div>
             <!-- TOS -->
             <div class="mb-3 pl-6">
-              <input type="checkbox" class="w-4 h-4 float-left -ml-6 mt-1 rounded" />
+              <vee-field type="checkbox" class="w-4 h-4 float-left -ml-6 mt-1 rounded"
+              name="tos" value="1" />
               <label class="inline-block">Accept terms of service</label>
             </div>
+             <ErrorMessage class="text-red-600" name="tos" />
             <button type="submit"
               class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition
                 hover:bg-purple-700">
@@ -148,15 +160,18 @@ export default {
   name: 'Auth',
   data() {
     return {
-      tab: 'login',
+      tab: 'register',
       schema: {
         name: 'required|min:3|max:100|alpha_spaces',
-        email: '',
-        age: '',
-        password: '',
-        confirm_password: '',
-        country: '',
-        tos: '',
+        email: 'required|min:3|max:100|email',
+        age: 'required|min_value:18|max_value:100',
+        password: 'required|min:3|max:100',
+        confirm_password: 'passwords_mismatch:@password',
+        country: 'required|country_excluded:Antarctica',
+        tos: 'tos',
+      },
+      userData: {
+        country: 'USA',
       },
     };
   },
@@ -165,6 +180,9 @@ export default {
   },
   methods: {
     ...mapMutations(['toggleAuthModal']),
+    register(values) {
+      console.log(values);
+    },
   },
 };
 </script>

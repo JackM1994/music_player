@@ -32,7 +32,7 @@ export default {
           min: `The field ${ctx.field} is too short.`,
           max: `The field ${ctx.field} is too long.`,
           alpha_spaces: `The field ${ctx.field} is may only contain alpahbetical characters.`,
-          email: `The field ${ctx.field} is must be a valid email.`,
+          email: `The field ${ctx.field} must be a valid email.`,
           min_value: `The field ${ctx.field} is too low.`,
           max_value: `The field ${ctx.field} is too high.`,
           excluded: `You are not allowed to use this value for the field ${ctx.field}.`,
@@ -47,6 +47,10 @@ export default {
 
         return message;
       },
+      validateOnBlur: true,
+      validateOnChange: true,
+      validateOnInput: false,
+      validateOnModelUpdate: true,
     });
   },
 };

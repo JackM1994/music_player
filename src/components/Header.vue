@@ -9,8 +9,12 @@
             <ul class="flex flex-row mt-1">
             <!-- Navigation Links -->
             <li>
-                <a class="px-2 text-white" href="#" @click.prevent="toggleAuthModal">
-                    Login / Register
+                <a class="px-2 text-white" href="#" @click.prevent="toggleAuthModal('login')">
+                    Login
+                </a>
+                <span class="text-white"> / </span>
+                <a class="px-2 text-white" href="#" @click.prevent="toggleAuthModal('register')">
+                    Register
                 </a>
             </li>
             <li>
